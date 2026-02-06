@@ -162,6 +162,14 @@ body {
   font-weight: 600;
 }
 
+.subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: left;
+  max-width: none;
+}
+
 .crumbs {
   font-size: 12px;
   color: var(--muted);
@@ -278,6 +286,34 @@ select {
   font-size: 14px;
   color: var(--text);
   font-weight: 600;
+}
+
+.panel-title.accent {
+  color: var(--accent);
+}
+
+.panel-title.accent-2 {
+  color: var(--accent-2);
+}
+
+.panel-title.success {
+  color: var(--green);
+}
+
+.panel-title.warning {
+  color: var(--orange);
+}
+
+.panel-title.danger {
+  color: var(--danger);
+}
+
+.panel-title.info {
+  color: #7dd3fc;
+}
+
+.panel-title.muted {
+  color: var(--muted);
 }
 
 .panel-sub {
@@ -441,6 +477,137 @@ select {
   border-bottom: none;
 }
 
+.panel-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(170px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.flow-step {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.flow-step.main {
+  position: relative;
+}
+
+.flow-step.main::after {
+  content: '→';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.flow-step.main:last-child::after {
+  display: none;
+}
+
+.flow-branch {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  gap: 12px;
+  position: relative;
+  padding-left: 18px;
+}
+
+.flow-branch .flow-step {
+  position: relative;
+}
+
+.flow-arrow {
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.flow-branch-arrow {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+
+.flow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(110, 231, 255, 0.5);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.flow-card {
+  background: #111624;
+  border: 1px solid #1f2736;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.flow-title {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.flow-desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.flow-meta {
+  font-size: 11px;
+  color: #c7d0e3;
+}
+
+.flow-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.flow-table th,
+.flow-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #1a2030;
+  text-align: left;
+  vertical-align: top;
+  color: var(--text);
+}
+
+.flow-table th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.flow-table tr:last-child td {
+  border-bottom: none;
+}
+
 .mono {
   font-family: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
   font-size: 11px;
@@ -520,6 +687,60 @@ select {
   padding-top: 8px;
 }
 
+.panel-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: #c7d0e3;
+}
+
+.kv-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #111624;
+  border: 1px solid #1f2736;
+}
+
+.kv-key {
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
+  font-size: 11px;
+}
+
+.kv-value {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.kv-value.ok {
+  color: var(--green);
+}
+
+.kv-value.miss {
+  color: var(--orange);
+}
+
+.kv-time {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.kv-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px dashed #273145;
+  padding-top: 8px;
+}
+
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
@@ -550,5 +771,25 @@ select {
 
   .global-right {
     justify-content: flex-start;
+  }
+
+  .flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-step.main::after {
+    display: none;
+  }
+
+  .flow-branch {
+    padding-left: 0;
+  }
+
+  .flow-arrow {
+    display: none;
+  }
+
+  .flow-branch-arrow {
+    display: none;
   }
 }

@@ -44,6 +44,7 @@
           <div class="title-block">
             <div class="crumbs">Dashboards /</div>
             <h1>Request drill-down</h1>
+            <div class="subtitle">Demo of a request flow through system components (service1, service2, and others).</div>
           </div>
           <div class="top-actions">
             <div class="time-range">
@@ -94,7 +95,139 @@
         <section class="panel-stack">
           <div class="panel wide">
             <div class="panel-header">
-              <div class="panel-title">Request details</div>
+              <div class="panel-title">Request flow</div>
+              <div class="panel-sub">requestID <span class="mono" data-request-id>{{requestId}}</span></div>
+            </div>
+            <div class="panel-body panel-flow">
+              <div class="flow-grid">
+                <div class="flow-step main">
+                  <div class="flow-dot"></div>
+                  <div class="flow-card">
+                    <div class="flow-title">service1</div>
+                    <div class="flow-desc">Incoming request</div>
+                    <div class="flow-meta" data-request-id>requestId={{requestId}}</div>
+                  </div>
+                </div>
+                <div class="flow-step main">
+                  <div class="flow-dot"></div>
+                  <div class="flow-card">
+                    <div class="flow-title">service2</div>
+                    <div class="flow-desc">Validation + cache lookup</div>
+                    <div class="flow-meta">latency 41 ms</div>
+                  </div>
+                </div>
+                <div class="flow-branch">
+                  <div class="flow-step branch">
+                    <div class="flow-arrow to-sql">→</div>
+                    <div class="flow-dot"></div>
+                    <div class="flow-card">
+                      <div class="flow-title">SQL</div>
+                      <div class="flow-desc">request_cache, routing</div>
+                      <div class="flow-meta">queries 3 · total 75 ms</div>
+                    </div>
+                    <div class="flow-branch-arrow">→</div>
+                  </div>
+                  <div class="flow-step branch">
+                    <div class="flow-arrow to-redis">→</div>
+                    <div class="flow-dot"></div>
+                    <div class="flow-card">
+                      <div class="flow-title">Redis</div>
+                      <div class="flow-desc">cache miss + write</div>
+                      <div class="flow-meta">ops 3 · total 19 ms</div>
+                    </div>
+                    <div class="flow-branch-arrow">→</div>
+                  </div>
+                  <div class="flow-step branch">
+                    <div class="flow-arrow to-elastic-diag">→</div>
+                    <div class="flow-dot"></div>
+                    <div class="flow-card">
+                      <div class="flow-title">Elastic</div>
+                      <div class="flow-desc">search hits</div>
+                      <div class="flow-meta">queries 3 · total 71 ms</div>
+                    </div>
+                    <div class="flow-branch-arrow">→</div>
+                  </div>
+                </div>
+                <div class="flow-step main">
+                  <div class="flow-dot"></div>
+                  <div class="flow-card">
+                    <div class="flow-title">service2</div>
+                    <div class="flow-desc">Response sent</div>
+                    <div class="flow-meta">status 200</div>
+                  </div>
+                </div>
+                <div class="flow-step main">
+                  <div class="flow-dot"></div>
+                  <div class="flow-card">
+                    <div class="flow-title">service1</div>
+                    <div class="flow-desc">Response to client</div>
+                    <div class="flow-meta">status 200</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Component</th>
+                      <th>Action</th>
+                      <th>Duration</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>service1</td>
+                      <td class="mono" data-request-id>GET /api/v1/request/status?requestId={{requestId}}</td>
+                      <td>65.5 ms</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>service2</td>
+                      <td>Validate + cache miss</td>
+                      <td>41 ms</td>
+                    </tr>
+                    <tr>
+                      <td>3.1</td>
+                      <td>SQL</td>
+                      <td>3 queries (request_cache, routing)</td>
+                      <td>75 ms</td>
+                    </tr>
+                    <tr>
+                      <td>3.2</td>
+                      <td>Redis</td>
+                      <td>Cache MISS → SET</td>
+                      <td>19 ms</td>
+                    </tr>
+                    <tr>
+                      <td>3.3</td>
+                      <td>Elastic</td>
+                      <td>Search hits</td>
+                      <td>71 ms</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>service2</td>
+                      <td>Response sent</td>
+                      <td>12 ms</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>service1</td>
+                      <td>Response to client</td>
+                      <td>8 ms</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title accent">Request details</div>
               <div class="panel-sub">Incoming Request URL</div>
             </div>
             <div class="panel-body panel-table">
@@ -123,7 +256,7 @@
 
           <div class="panel wide">
             <div class="panel-header">
-              <div class="panel-title">service1</div>
+              <div class="panel-title accent-2">Service1</div>
               <div class="panel-sub">incoming request</div>
             </div>
             <div class="panel-body panel-table">
@@ -162,7 +295,7 @@
 
           <div class="panel wide">
             <div class="panel-header">
-              <div class="panel-title">service2</div>
+              <div class="panel-title success">Service2</div>
               <div class="panel-sub">logs</div>
             </div>
             <div class="panel-body panel-log">
@@ -175,7 +308,7 @@
 
           <div class="panel wide">
             <div class="panel-header">
-              <div class="panel-title">SQL</div>
+              <div class="panel-title warning">SQL</div>
               <div class="panel-sub">rows</div>
             </div>
             <div class="panel-body panel-sql">
@@ -200,7 +333,74 @@
 
           <div class="panel wide">
             <div class="panel-header">
-              <div class="panel-title">raw</div>
+              <div class="panel-title danger">Redis</div>
+              <div class="panel-sub">cache ops</div>
+            </div>
+            <div class="panel-body panel-kv">
+              <div class="kv-row">
+                <span class="kv-key" data-request-id>GET request:{{requestId}}</span>
+                <span class="kv-value miss">MISS</span>
+                <span class="kv-time">6 ms</span>
+              </div>
+              <div class="kv-row">
+                <span class="kv-key" data-request-id>SET request:{{requestId}}</span>
+                <span class="kv-value ok">OK</span>
+                <span class="kv-time">9 ms</span>
+              </div>
+              <div class="kv-row">
+                <span class="kv-key" data-request-id>EXPIRE request:{{requestId}}</span>
+                <span class="kv-value ok">OK</span>
+                <span class="kv-time">4 ms</span>
+              </div>
+              <div class="kv-total">
+                <span>Total 19 ms</span>
+                <span>Count 3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title info">Elastic</div>
+              <div class="panel-sub">search hits</div>
+            </div>
+            <div class="panel-body panel-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>index</th>
+                    <th>query</th>
+                    <th>hits</th>
+                    <th>took</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>logs-requests</td>
+                    <td class="mono" data-request-id>requestId:{{requestId}}</td>
+                    <td>14</td>
+                    <td>32 ms</td>
+                  </tr>
+                  <tr>
+                    <td>logs-service2</td>
+                    <td class="mono" data-request-id>requestId:{{requestId}}</td>
+                    <td>7</td>
+                    <td>21 ms</td>
+                  </tr>
+                  <tr>
+                    <td>metrics-latency</td>
+                    <td class="mono" data-request-id>requestId:{{requestId}}</td>
+                    <td>3</td>
+                    <td>18 ms</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title muted">Raw</div>
               <div class="panel-sub">by requestId</div>
             </div>
             <div class="panel-body panel-table">
