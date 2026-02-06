@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grafana Stub</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">G</div>
+        <nav class="nav">
+          <div class="nav-item active">Dashboards</div>
+          <div class="nav-item">Explore</div>
+          <div class="nav-item">Alerting</div>
+          <div class="nav-item">Connections</div>
+          <div class="nav-item">Administration</div>
+        </nav>
+        <div class="sidebar-footer">v Stub</div>
+      </aside>
+
+      <main class="main">
+        <header class="globalbar">
+          <div class="global-left">
+            <span class="crumbs">Home</span>
+            <span class="crumbs">/</span>
+            <span class="crumbs">Dashboards</span>
+          </div>
+          <div class="global-center">
+            <div class="search-box">
+              <span class="search-icon">⌕</span>
+              <input type="text" placeholder="Search dashboards" />
+            </div>
+          </div>
+          <div class="global-right">
+            <button class="icon-btn" type="button">★</button>
+            <button class="icon-btn" type="button">⎘</button>
+            <button class="icon-btn primary" type="button">Share</button>
+          </div>
+        </header>
+
+        <header class="topbar">
+          <div class="title-block">
+            <div class="crumbs">Dashboards /</div>
+            <h1>Request drill-down</h1>
+          </div>
+          <div class="top-actions">
+            <div class="time-range">
+              <button class="control" type="button">
+                <span id="timeRangeLabel">Last 6 hours</span>
+                <span class="caret">▾</span>
+              </button>
+              <button class="control ghost" type="button">Pick time range</button>
+            </div>
+            <div class="refresh">
+              <button class="control" type="button">
+                <span>Refresh</span>
+                <span class="caret">▾</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section class="variables compact">
+          <div class="var-card">
+            <label for="service">service</label>
+            <div class="select-wrap">
+              <select id="service" name="service">
+                <option>All</option>
+                <option>service1</option>
+                <option>service2</option>
+                <option>service3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="var-card">
+            <label for="requestId">requestID</label>
+            <input id="requestId" name="requestId" type="text" placeholder="requestId" />
+          </div>
+
+          <div class="var-card">
+            <label>host</label>
+            <input type="text" placeholder="All" disabled />
+          </div>
+
+          <div class="var-card">
+            <label>endpoint</label>
+            <input type="text" placeholder="All" disabled />
+          </div>
+        </section>
+
+        <section class="panel-stack">
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title">Request details</div>
+              <div class="panel-sub">Incoming Request URL</div>
+            </div>
+            <div class="panel-body panel-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Time (ms)</th>
+                    <th>url</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-02-06 00:21:10</td>
+                    <td>GET</td>
+                    <td>200</td>
+                    <td>65.5</td>
+                    <td class="mono" data-request-id>/api/v1/request/status?requestId={{requestId}}&amp;account=3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title">service1</div>
+              <div class="panel-sub">incoming request</div>
+            </div>
+            <div class="panel-body panel-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>status</th>
+                    <th>msg</th>
+                    <th>responseTime</th>
+                    <th>detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>200</td>
+                    <td>[http] fetching from remote server</td>
+                    <td>79 ms</td>
+                    <td class="mono">GET /api/v1/request/details</td>
+                  </tr>
+                  <tr>
+                    <td>200</td>
+                    <td>[http] response received</td>
+                    <td>60 ms</td>
+                    <td class="mono">POST /api/v1/validate</td>
+                  </tr>
+                  <tr>
+                    <td>200</td>
+                    <td>[http] response received</td>
+                    <td>68 ms</td>
+                    <td class="mono">GET /api/v1/request/status</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title">service2</div>
+              <div class="panel-sub">logs</div>
+            </div>
+            <div class="panel-body panel-log">
+              <div class="log-line"><span class="log-time">[00:21:10.250]</span> <span class="log-tag">service2</span> request routed to shard=api-eu1</div>
+              <div class="log-line" data-request-id><span class="log-time">[00:21:10.312]</span> <span class="log-tag warn">warn</span> cache miss for requestId={{requestId}}</div>
+              <div class="log-line"><span class="log-time">[00:21:10.420]</span> <span class="log-tag">service2</span> sql lookup completed in 41ms</div>
+              <div class="log-line"><span class="log-time">[00:21:10.501]</span> <span class="log-tag ok">ok</span> response 200 sent to service1</div>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title">SQL</div>
+              <div class="panel-sub">rows</div>
+            </div>
+            <div class="panel-body panel-sql">
+              <div class="sql-row">
+                <span class="sql-text" data-request-id>SELECT * FROM requests WHERE request_id = '{{requestId}}'</span>
+                <span class="sql-time">12 ms</span>
+              </div>
+              <div class="sql-row">
+                <span class="sql-text" data-request-id>UPDATE request_cache SET status = 'ok' WHERE request_id = '{{requestId}}'</span>
+                <span class="sql-time">38 ms</span>
+              </div>
+              <div class="sql-row">
+                <span class="sql-text" data-request-id>SELECT service FROM routing WHERE request_id = '{{requestId}}'</span>
+                <span class="sql-time">25 ms</span>
+              </div>
+              <div class="sql-total">
+                <span>Total 75 ms</span>
+                <span>Count 3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel wide">
+            <div class="panel-header">
+              <div class="panel-title">raw</div>
+              <div class="panel-sub">by requestId</div>
+            </div>
+            <div class="panel-body panel-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>time</th>
+                    <th>service</th>
+                    <th>level</th>
+                    <th>message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-02-06 00:21:10.120</td>
+                    <td>service1</td>
+                    <td>info</td>
+                    <td class="mono" data-request-id>incoming request requestId={{requestId}}</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-06 00:21:10.431</td>
+                    <td>service2</td>
+                    <td>warn</td>
+                    <td class="mono" data-request-id>cache miss for key=request:{{requestId}}</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-06 00:21:10.882</td>
+                    <td>service2</td>
+                    <td>info</td>
+                    <td class="mono" data-request-id>sync completed for requestId={{requestId}}</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-06 00:21:11.210</td>
+                    <td>service1</td>
+                    <td>info</td>
+                    <td class="mono">response delivered to client</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
