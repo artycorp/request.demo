@@ -99,7 +99,7 @@
                 <div class="flow-dot"></div>
                 <div class="flow-card">
                   <div class="flow-title">SQL</div>
-                  <div class="flow-desc">request_cache, routing</div>
+                  <div class="flow-desc">users table</div>
                   <div class="flow-meta">queries 3 · total 75 ms</div>
                 </div>
                 <div class="flow-branch-arrow">→</div>
@@ -157,8 +157,8 @@
                 <tr>
                   <td>1</td>
                   <td>service1</td>
-                  <td class="mono" data-request-id>GET /api/v1/request/status?requestId={{requestId}}</td>
-                  <td>65.5 ms</td>
+                  <td class="mono" data-request-id>GET /v1/users?limit=10&amp;requestId={{requestId}}</td>
+                  <td>150.5 ms</td>
                 </tr>
                 <tr>
                   <td>2</td>
@@ -169,7 +169,7 @@
                 <tr>
                   <td>3.1</td>
                   <td>SQL</td>
-                  <td>3 queries (request_cache, routing)</td>
+                  <td>3 queries (users)</td>
                   <td>75 ms</td>
                 </tr>
                 <tr>
@@ -220,11 +220,11 @@
             </thead>
             <tbody>
               <tr>
-                <td>2026-02-06 00:21:10</td>
+                <td>2026-02-09 10:00:00</td>
                 <td>GET</td>
                 <td>200</td>
-                <td>65.5</td>
-                <td class="mono" data-request-id>/api/v1/request/status?requestId={{requestId}}&amp;account=3</td>
+                <td>150.5</td>
+                <td class="mono" data-request-id>/v1/users?limit=10&amp;requestId={{requestId}}</td>
               </tr>
             </tbody>
           </table>
@@ -250,20 +250,20 @@
               <tr>
                 <td>200</td>
                 <td>[http] fetching from remote server</td>
-                <td>79 ms</td>
-                <td class="mono">GET /api/v1/request/details</td>
+                <td>150 ms</td>
+                <td class="mono">GET /v1/users?limit=10</td>
               </tr>
               <tr>
                 <td>200</td>
                 <td>[http] response received</td>
-                <td>60 ms</td>
-                <td class="mono">POST /api/v1/validate</td>
+                <td>450 ms</td>
+                <td class="mono">POST /v1/auth/login</td>
               </tr>
               <tr>
-                <td>200</td>
+                <td>404</td>
                 <td>[http] response received</td>
-                <td>68 ms</td>
-                <td class="mono">GET /api/v1/request/status</td>
+                <td>120 ms</td>
+                <td class="mono">GET /v1/profile</td>
               </tr>
             </tbody>
           </table>
@@ -276,10 +276,10 @@
           <span class="panel-sub">logs</span>
         </div>
         <div class="panel-body panel-log">
-          <div class="log-line"><span class="log-time">[00:21:10.250]</span> <span class="log-tag">service2</span> request routed to shard=api-eu1</div>
-          <div class="log-line" data-request-id><span class="log-time">[00:21:10.312]</span> <span class="log-tag warn">warn</span> cache miss for requestId={{requestId}}</div>
-          <div class="log-line"><span class="log-time">[00:21:10.420]</span> <span class="log-tag">service2</span> sql lookup completed in 41ms</div>
-          <div class="log-line"><span class="log-time">[00:21:10.501]</span> <span class="log-tag ok">ok</span> response 200 sent to service1</div>
+          <div class="log-line"><span class="log-time">[10:00:00.050]</span> <span class="log-tag">service2</span> request routed to /v1/users?limit=10</div>
+          <div class="log-line" data-request-id><span class="log-time">[10:00:00.112]</span> <span class="log-tag warn">warn</span> cache miss for user:{{requestId}}</div>
+          <div class="log-line"><span class="log-time">[10:00:00.220]</span> <span class="log-tag">service2</span> sql lookup on users table completed in 41ms</div>
+          <div class="log-line"><span class="log-time">[10:00:00.301]</span> <span class="log-tag ok">ok</span> response 200 sent to service1</div>
         </div>
       </div>
 
@@ -290,15 +290,15 @@
         </div>
         <div class="panel-body panel-sql">
           <div class="sql-row">
-            <span class="sql-text" data-request-id>SELECT * FROM requests WHERE request_id = '{{requestId}}'</span>
+            <span class="sql-text" data-request-id>SELECT * FROM users WHERE request_id = '{{requestId}}'</span>
             <span class="sql-time">12 ms</span>
           </div>
           <div class="sql-row">
-            <span class="sql-text" data-request-id>UPDATE request_cache SET status = 'ok' WHERE request_id = '{{requestId}}'</span>
+            <span class="sql-text" data-request-id>UPDATE users SET last_seen = NOW() WHERE request_id = '{{requestId}}'</span>
             <span class="sql-time">38 ms</span>
           </div>
           <div class="sql-row">
-            <span class="sql-text" data-request-id>SELECT service FROM routing WHERE request_id = '{{requestId}}'</span>
+            <span class="sql-text" data-request-id>SELECT role FROM users WHERE request_id = '{{requestId}}'</span>
             <span class="sql-time">25 ms</span>
           </div>
           <div class="sql-total">
@@ -315,17 +315,17 @@
         </div>
         <div class="panel-body panel-kv">
           <div class="kv-row">
-            <span class="kv-key" data-request-id>GET request:{{requestId}}</span>
+            <span class="kv-key" data-request-id>GET user:{{requestId}}</span>
             <span class="kv-value miss">MISS</span>
             <span class="kv-time">6 ms</span>
           </div>
           <div class="kv-row">
-            <span class="kv-key" data-request-id>SET request:{{requestId}}</span>
+            <span class="kv-key" data-request-id>SET user:{{requestId}}</span>
             <span class="kv-value ok">OK</span>
             <span class="kv-time">9 ms</span>
           </div>
           <div class="kv-row">
-            <span class="kv-key" data-request-id>EXPIRE request:{{requestId}}</span>
+            <span class="kv-key" data-request-id>EXPIRE user:{{requestId}}</span>
             <span class="kv-value ok">OK</span>
             <span class="kv-time">4 ms</span>
           </div>
@@ -353,19 +353,19 @@
             </thead>
             <tbody>
               <tr>
-                <td>logs-requests</td>
+                <td>logs-api</td>
                 <td class="mono" data-request-id>requestId:{{requestId}}</td>
                 <td>14</td>
                 <td>32 ms</td>
               </tr>
               <tr>
-                <td>logs-service2</td>
+                <td>logs-auth</td>
                 <td class="mono" data-request-id>requestId:{{requestId}}</td>
                 <td>7</td>
                 <td>21 ms</td>
               </tr>
               <tr>
-                <td>metrics-latency</td>
+                <td>metrics-users</td>
                 <td class="mono" data-request-id>requestId:{{requestId}}</td>
                 <td>3</td>
                 <td>18 ms</td>
@@ -392,28 +392,28 @@
             </thead>
             <tbody>
               <tr>
-                <td>2026-02-06 00:21:10.120</td>
+                <td>2026-02-09 10:00:00.020</td>
                 <td>service1</td>
                 <td>info</td>
-                <td class="mono" data-request-id>incoming request requestId={{requestId}}</td>
+                <td class="mono" data-request-id>incoming GET /v1/users?limit=10 requestId={{requestId}}</td>
               </tr>
               <tr>
-                <td>2026-02-06 00:21:10.431</td>
+                <td>2026-02-09 10:00:00.131</td>
                 <td>service2</td>
                 <td>warn</td>
-                <td class="mono" data-request-id>cache miss for key=request:{{requestId}}</td>
+                <td class="mono" data-request-id>cache miss for key=user:{{requestId}}</td>
               </tr>
               <tr>
-                <td>2026-02-06 00:21:10.882</td>
+                <td>2026-02-09 10:00:00.282</td>
                 <td>service2</td>
                 <td>info</td>
-                <td class="mono" data-request-id>sync completed for requestId={{requestId}}</td>
+                <td class="mono" data-request-id>users lookup completed for requestId={{requestId}}</td>
               </tr>
               <tr>
-                <td>2026-02-06 00:21:11.210</td>
+                <td>2026-02-09 10:00:00.410</td>
                 <td>service1</td>
                 <td>info</td>
-                <td class="mono">response delivered to client</td>
+                <td class="mono">response 200 delivered to client</td>
               </tr>
             </tbody>
           </table>
